@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.bob.web.applications</groupId>
+        <artifactId>SMLite</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>smlite-rest</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.skip.test.run>false</maven.skip.test.run>
+        
+        <!-- VERSIONS -->
+        <jaxrs.version>2.0.1</jaxrs.version>
+        <spring.version>4.3.2-RELEASE</spring.version>
+        <jersey.version>2.23.2</jersey.version>
+        <smlite.version>1.0-SNAPSHOT</smlite.version>
+        <genson.version>1.4</genson.version>
+        <gson.version>2.7</gson.version>
+        
+    </properties>
+    
+    <dependencies>
+       
+        <!-- JAX-RS -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${jaxrs.version}</version>
+        </dependency>
+        
+        <!-- Jersey -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        
+        <!--dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${jersey.version}</version>
+        </dependency-->
+
+        <!-- JSON MANAGER -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.owlike</groupId>
+            <artifactId>genson</artifactId>
+            <version>${genson.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.bob.web.applications</groupId>
+            <artifactId>smlite-engine</artifactId>
+            <version>${smlite.version}</version>
+        </dependency>
+        
+    </dependencies>
+        
+        
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <skipTests>${maven.skip.test.run}</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+            
+</project>
