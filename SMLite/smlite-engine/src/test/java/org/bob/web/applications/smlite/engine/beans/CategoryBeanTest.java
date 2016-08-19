@@ -132,7 +132,7 @@ public class CategoryBeanTest {
             System.out.println( "@@@ TEST: db says: " + _cat.get(0).toString() );
             
             System.out.println("@@@ TEST: deleting fake category . . .");
-            cm.delete(cat);   
+            cm.delete(cat.getId());   
         }
         catch ( SMLiteDAOException ex )
         {

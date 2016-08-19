@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.bob.web.applications.smlite.engine.exceptions;
+package org.bob.web.applications.smlite.web.spring.ctrls;
 
 /**
  *
  * @author roberto.gatti
  */
-public class SMLiteDAOException extends Throwable {
-
-    public SMLiteDAOException(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class DraftCtrl
+{
     
 }

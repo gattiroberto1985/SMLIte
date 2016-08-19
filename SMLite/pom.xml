@@ -11,6 +11,6 @@
   <modules>
     <module>smlite-web</module>
     <module>smlite-engine</module>
-    <module>smlite-rest</module>
+    <!--module>smlite-rest</module-->
   </modules>
 </project>

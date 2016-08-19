@@ -85,7 +85,7 @@ public interface AbstractManager<SMLiteObjType> {
      * @throws SMLiteDAOException if something goes wrong.
      */
     @Transactional
-    public abstract void delete(SMLiteObjType bean) throws SMLiteDAOException;
+    public abstract void delete(int id) throws SMLiteDAOException;
     
     //</editor-fold>
     

@@ -34,6 +34,73 @@ laterale sarà possibile:
 Dalla home page dovrà essere possibile inoltre creare una nuova bozza di spesa,
 eventualmente vincolata ad uno specifico negozio.
 
+Le pagine condivideranno il menu laterale, che dovrà riportare le voci:
+
+- `admin`;
+- `report`;
+- `spese`;
+- `logoff`.
+
+
+#### Home page
+
+La home page dell'applicazione presenterà due pannelli a scomparsa in cui
+verranno presentati:
+
+- la lista delle bozze di spesa aperte, con un tasto apposito a fianco al titolo
+  per la creazione di una nuova bozza; ogni elemento della lista bozze dovrà
+  avere dei tasti di rimozione, di completamento bozza e di creazione spesa
+  basata sulla bozza;
+
+- La lista delle ultime spese (con filtri impostabili dall'utente), riportanti
+  le informazioni di testata delle stesse. Ogni spesa dovrà avere dei tasti di
+  rimozione e di apertura.
+
+Di seguito una mini tabellina con tutte le chiamate rest possibili da questa
+pagina:
+
+<table>
+    <tr>
+        <th>Metodo</th><th>URL</th><th>Descrizione</th>
+    </tr>
+    <tr>
+        <td>GET</td><td>/web/my</td><td>Vai a user admin (menu)</td>
+    </tr>
+    <tr>
+        <td>GET</td><td>/web/report</td><td>Vai a pag. report (menu)</td>
+    </tr>
+    <tr>
+        <td>POST</td><td>/web/logoff</td><td>Esegui logoff (menu)</td>
+    </tr>
+    <!-- OPERAZIONI SU BOZZE -->
+    <tr>
+        <td>POST</td><td>/web/drafts/</td><td>Crea bozza spesa (tasto)</td>
+    </tr>
+    <tr>
+        <td>PUT</td><td>/web/drafts/:id?archive</td><td>Archivia bozza (tasto)</td>
+    </tr>
+    <tr>
+        <td>DELETE</td><td>/web/drafts/:id</td><td>Rimuovi bozza spesa (tasto)</td>
+    </tr>
+    <tr>
+        <td>GET</td><td>/web/drafts/:id</td><td>Apri bozza spesa (click su bozza)</td>
+    </tr>    
+    <!-- OPERAZIONI SU SPESE -->
+    <tr>
+        <td>POST</td><td>/web/expenses/</td><td>Crea spesa (tasto)</td>
+    </tr>
+    <!--tr>
+        <td>PUT</td><td>/web/expenses/:id?archive</td><td>Archivia bozza (tasto)</td>
+    </tr-->
+    <tr>
+        <td>DELETE</td><td>/web/expenses/:id</td><td>Rimuovi spesa (tasto)</td>
+    </tr>
+    <tr>
+        <td>GET</td><td>/web/expenses/:id</td><td>Apri spesa (click su spesa)</td>
+    </tr>    
+</table>
+
+
 #### Gestione bozze di spesa
 
 TBD
@@ -127,3 +194,55 @@ Contiene i dettagli di un negozio di spesa. In prima battuta, non utilizzato.
 
 #### Oggetto `BrandBean`
 Contiene i dettagli di una marca di articoli. In prima battuta, non utilizzato.
+
+## Utilità varie
+
+Applicazione suddivisa in due moduli:
+
+- `smlite-web`, contenente i servizi REST e la componente web dell'applicazione;
+  la navigazione è basata sul framework Spring MVC, mentre la parte REST è
+  affidata a Jersey;
+- `smlite-engine`, contenente la logica di base dell'applicazione, i bean
+  fondamentali e l'interfaccia allo strato di persistenza.
+
+### Modulo web
+
+La parte Spring del modulo web è articolata in:
+
+- un file con i bean di spring, `spring-mvc-dispatcher-servlet.xml`, contenente
+  tutte le definizioni dei bean che dovranno essere utilizzati;
+- una serie di pagine `jsp` sotto la directory `WEB-INF/pages/`, che fungono da
+  `view` per l'applicazione;
+- una serie di classi java marcate con l'annotation `@Controller`, che fungono
+  appunto da `controller` relativamente al pattern MVC.
+
+Grosso modo, ogni path dell'interfaccia grafica corrisponde ad un path dei
+servizi REST di Jersey, in modo da rendere comune a entrambe le modalità le
+varie operazioni da eseguire.
+
+I path e le view messi a disposizione dai controller sono i seguenti:
+
+- `login`, su cui sono stati definiti i soli metodi `GET` e `POST`.
+  Rispettivamente:
+    - il primo passerà il controllo alla view relativa, con nome omonimo (e
+      nome file `login.jsp`);
+    - il secondo eseguirà il login vero e proprio all'applicazione, chiamando
+      un metodo opportuno di ricerca utente e verifica password definito nel
+      modulo `smlite-engine`. In base all'esito, si verrà rediretti verso le
+      viste `error` o `home`;
+
+- `error`, su cui è stato definito il singolo metodo `GET`. Con questa chiamata
+  verranno gestiti tutti gli errori a runtime dell'applicazione web;
+
+- `logout`, su cui verrà definito il solo metodo `POST` che permetterà il logoff
+  dall'applicazione; tale operazione redirigerà poi verso la pagina di login,
+  tramite `return` verso la vista relativa;
+
+- `home`: pagina principale dell'applicazione, cui si accede dopo un login
+  eseguito con successo. Su tale path è definito il metodo `GET`, che procederà
+  a popolare la pagina con i dati dell'utente. In particolare, saranno da
+  recuperare:
+    - le bozze di spesa;
+    - le ultime spese eseguite;
+  Tali dati dovranno poi essere iniettati nel `model` della pagina, affinchè
+  siano visibili all'utente.

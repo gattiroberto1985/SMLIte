@@ -21,16 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.bob.web.applications.smlite.engine.exceptions;
+package org.bob.web.applications.smlite.web.spring.utils;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  *
  * @author roberto.gatti
  */
-public class SMLiteDAOException extends Throwable {
+public class ApplicationContextProvider implements ApplicationContextAware {
 
-    public SMLiteDAOException(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static ApplicationContext context;
+
+    public static ApplicationContext getApplicationContext() 
+    {
+        return context;
     }
-    
+
+    @Override
+    public void setApplicationContext(ApplicationContext ac) throws BeansException 
+    {
+        context = ac;
+    }
 }

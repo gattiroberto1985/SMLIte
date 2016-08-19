@@ -43,6 +43,12 @@ public class CategoriesManagerImpl implements AbstractManager<CategoryBean> {
         this.daoCategory = daoCategory;
     }
     
+    public CategoriesManagerImpl(AbstractDAO dao)
+    {
+        System.out.println("CREATING NEW CATEGORIESMANAGERIMPL");
+        this.daoCategory = dao;
+    }
+    
     /**
      * Bulk insert method for categories.
      * 
@@ -86,8 +92,8 @@ public class CategoriesManagerImpl implements AbstractManager<CategoryBean> {
 
     @Override
     @Transactional
-    public void delete(CategoryBean bean) throws SMLiteDAOException {
-        this.daoCategory.delete(bean);
+    public void delete(int id) throws SMLiteDAOException {
+        this.daoCategory.delete(id);
     }
     
     //</editor-fold>

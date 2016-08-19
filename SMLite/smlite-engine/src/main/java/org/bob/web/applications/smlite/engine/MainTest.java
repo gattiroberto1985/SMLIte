@@ -65,10 +65,10 @@ public class MainTest {
         return cm.update(bean);        
     }
 
-    public void deleteCategory(CategoryBean bean) throws SMLiteDAOException
+    public void deleteCategory(int id) throws SMLiteDAOException
     {
         AbstractManager<CategoryBean> cm = (AbstractManager<CategoryBean>) ctx.getBean("categoriesManager");
-        cm.delete(bean);        
+        cm.delete(id);        
     }
     
 }

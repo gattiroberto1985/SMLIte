@@ -5,6 +5,17 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
     
+        <listener>
+            <listener-class>
+                org.springframework.web.context.ContextLoaderListener
+            </listener-class>
+        </listener>
+
+        <context-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/applicationContext.xml</param-value>
+        </context-param>    
+    
     <servlet>
         <servlet-name>jersey-serlvet</servlet-name>
         <servlet-class>
@@ -17,10 +28,31 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
+
+    <!-- 
+        Jersey will handle all the request under 'rest' offset, which 
+        identify a REST service . . . 
+     -->
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
-        <!--url-pattern>/*</url-pattern-->
+    </servlet-mapping>    
+    
+    <servlet>
+          <servlet-name>spring-mvc-dispatcher</servlet-name>
+          <servlet-class>
+               org.springframework.web.servlet.DispatcherServlet
+          </servlet-class>
+          <load-on-startup>1</load-on-startup>
+    </servlet>
+        
+    <!-- 
+        . . . while spring will handle the requests under 'web' offset,
+        which identify jsp or other frontend.
+     -->
+    <servlet-mapping>
+ 	<servlet-name>spring-mvc-dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>    
     
     <session-config>

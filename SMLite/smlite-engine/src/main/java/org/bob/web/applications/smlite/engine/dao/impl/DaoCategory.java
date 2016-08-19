@@ -30,6 +30,7 @@ import org.bob.web.applications.smlite.engine.beans.CategoryBean;
 import org.bob.web.applications.smlite.engine.dao.AbstractDAO;
 import org.bob.web.applications.smlite.engine.exceptions.SMLiteDAOException;
 import org.bob.web.applications.smlite.engine.utils.SMliteDb;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -87,10 +88,19 @@ public class DaoCategory /*extends HibernateDaoSupport*/ implements AbstractDAO<
 
     @Override
     @Transactional
-    public void delete(CategoryBean bean) throws SMLiteDAOException {
-        //sessionFactory.getCurrentSession().setCheckWriteOperations(false);
-        sessionFactory.getCurrentSession().delete(bean);
-        //sessionFactory.getCurrentSession().flush();
+    public void delete(int id) throws SMLiteDAOException {
+        try
+        {
+            Session cs = sessionFactory.getCurrentSession();
+            //cs.beginTransaction();
+            CategoryBean bean = ( CategoryBean ) cs.get(CategoryBean.class, id);
+            cs.delete(bean);
+            //cs.getTransaction().commit();
+        }
+        catch ( HibernateException ex)
+        {
+            throw new SMLiteDAOException("ERROR: unable to delete category with id '" + id + ", due to: '" + ex.getMessage() + "'");
+        }
     }
     
     private List<CategoryBean> getAllCategories()

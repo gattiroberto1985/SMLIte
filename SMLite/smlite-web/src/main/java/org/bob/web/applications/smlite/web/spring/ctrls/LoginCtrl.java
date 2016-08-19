@@ -21,16 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.bob.web.applications.smlite.engine.exceptions;
+package org.bob.web.applications.smlite.web.spring.ctrls;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
  * @author roberto.gatti
  */
-public class SMLiteDAOException extends Throwable {
-
-    public SMLiteDAOException(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+@Controller
+public class LoginCtrl
+{
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/web/login" )
+    public String getLogin(@ModelAttribute /* UserBean */ Object model)
+    {
+        return "login";
     }
     
+    @RequestMapping(method = RequestMethod.POST, value = "/login" )
+    public String doLogin(@ModelAttribute /* UserBean */ Object model)
+    {
+        return "login";
+    }
+    
+        
 }

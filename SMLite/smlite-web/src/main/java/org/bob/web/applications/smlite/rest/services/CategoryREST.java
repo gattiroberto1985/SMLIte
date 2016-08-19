@@ -31,11 +31,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.bob.web.applications.smlite.engine.MainTest;
 import org.bob.web.applications.smlite.engine.beans.CategoryBean;
+import org.bob.web.applications.smlite.engine.managers.AbstractManager;
 import org.bob.web.applications.smlite.rest.beans.RestResult;
+import org.bob.web.applications.smlite.web.spring.utils.ApplicationContextProvider;
 
 /**
  *
@@ -44,15 +47,20 @@ import org.bob.web.applications.smlite.rest.beans.RestResult;
 @Path( "/categories" )
 public class CategoryREST {
     
+    private AbstractManager<CategoryBean> categoriesManager;
+    
     @GET
     //@Consumes({MediaType.APPLICATION_JSON } )
     @Produces({MediaType.APPLICATION_JSON } )
     public RestResult getCategories() {
+        if ( this.categoriesManager == null )
+            this.setCategoriesManager();
+        
         List<CategoryBean> categories = new ArrayList<CategoryBean>();
         RestResult result = new RestResult();
         try
         {
-            categories = MainTest.getInstance().getCategories();
+            categories = this.categoriesManager.get(null);
             result.setHttpCode(200);
             result.setMessage("Categories retreived!");
             result.setBody(categories);
@@ -89,17 +97,26 @@ public class CategoryREST {
     }
     
     @DELETE
-    @Consumes({MediaType.APPLICATION_JSON})
+    //@Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public RestResult deleteCategory(CategoryBean bean)
+    @Path("{id}")
+    public RestResult deleteCategory(@PathParam("id") String _id)
     {
         RestResult result = new RestResult();
         try
         {
-            MainTest.getInstance().deleteCategory(bean);
+            if ( _id == null )
+                throw new NullPointerException("The id of the updated category must be specified in the url (e. g. '.../rest/categories/1')!");
+            int id = Integer.parseInt(_id);            
+            MainTest.getInstance().deleteCategory(id);
             result.setHttpCode(200);
             result.setMessage("Category successfully deleted!");
-            result.setBody(bean);            
+            result.setBody(null);            
+        }
+        catch ( NumberFormatException e )
+        {
+            result.setHttpCode(500);
+            result.setMessage("Id of category is not a number: '" + _id + "'!");            
         }
         catch ( Throwable e )
         {
@@ -112,15 +129,24 @@ public class CategoryREST {
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public RestResult updateCategory(CategoryBean bean)
+    @Path("{id}")
+    public RestResult updateCategory(CategoryBean bean, @PathParam("id") String id)
     {
         RestResult result = new RestResult();
         try
         {
+            if ( id == null )
+                throw new NullPointerException("The id of the updated category must be specified in the url (e. g. '.../rest/categories/1')!");
+            Integer.parseInt(id);
             bean = MainTest.getInstance().updateCategory(bean);
             result.setHttpCode(200);
             result.setMessage("Category successfully updated!");
             result.setBody(bean);            
+        }
+        catch ( NumberFormatException e)
+        {
+            result.setHttpCode(500);
+            result.setMessage("Id of category is not a number: '" + id + "'!");
         }
         catch ( Throwable e )
         {
@@ -130,4 +156,10 @@ public class CategoryREST {
         return result;
     }
     
+    public void setCategoriesManager()
+    {
+        this.categoriesManager = (AbstractManager) ApplicationContextProvider
+                                        .getApplicationContext()
+                                        .getBean("categoriesManager");
+    }
 }
